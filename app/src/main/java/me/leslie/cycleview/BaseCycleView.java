@@ -26,7 +26,7 @@ import java.util.List;
  * 时间: 2017-01-03  17:14
  */
 
-public abstract class BaseCycleView<T extends ICycleData> extends RelativeLayout implements ICycleView, ViewPager.OnPageChangeListener{
+public abstract class BaseCycleView<T> extends RelativeLayout implements ICycleView, ViewPager.OnPageChangeListener{
 
     protected List<T> list;
     protected int size;
@@ -41,6 +41,7 @@ public abstract class BaseCycleView<T extends ICycleData> extends RelativeLayout
     private int lastWidth;
     private int lastHeight;
     private int[] pageIndecatorIds;
+    private ViewPager.PageTransformer pageTransformer;
     private SparseArray<ImageView> indecatorViews = new SparseArray<>();
 
     /**
@@ -107,6 +108,11 @@ public abstract class BaseCycleView<T extends ICycleData> extends RelativeLayout
         lp.bottomMargin = 20;
         addView(indicatorLayout, lp);
         pageIndecatorIds = getPageIndecatorIds();
+    }
+
+    @Override
+    public void setPageTransformer(ViewPager.PageTransformer tf) {
+        this.pageTransformer = tf;
     }
 
     @Override

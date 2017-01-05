@@ -1,5 +1,7 @@
 package me.leslie.cycleview;
 
+import android.support.v4.view.ViewPager;
+
 import java.util.List;
 
 /**
@@ -8,8 +10,13 @@ import java.util.List;
  * 邮箱：mr.feeling.heart@gmail.com
  * 时间: 2017-01-03  17:21
  */
+interface ICycleView<T> {
 
-public interface ICycleView<T extends ICycleData> {
+    /**
+     * 设置切换动画效果
+     * @param tf
+     */
+    void setPageTransformer(ViewPager.PageTransformer tf);
 
     /**
      * 获取设定最大数据
@@ -28,7 +35,7 @@ public interface ICycleView<T extends ICycleData> {
      * 设置数据
      * @param list
      */
-    BaseCycleView<T> setData(List<T> list);
+    BaseCycleView setData(List<T> list);
 
     /**
      * 获取item数据

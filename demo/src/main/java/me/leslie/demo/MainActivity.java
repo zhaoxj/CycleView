@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         list1.add(d1_3);
         iView.setData(null);
 
-
         IView i = new IView(getApplicationContext());
         layout.addView(i, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500));
         i.setData(list1);
