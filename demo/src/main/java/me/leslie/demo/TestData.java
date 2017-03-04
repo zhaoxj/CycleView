@@ -1,7 +1,5 @@
 package me.leslie.demo;
 
-import me.leslie.cycleview.ICycleData;
-
 /**
  * 介绍：
  * 作者：xjzhao
@@ -9,7 +7,7 @@ import me.leslie.cycleview.ICycleData;
  * 时间: 2017-01-03  18:27
  */
 
-public class TestData implements ICycleData {
+public class TestData {
     private String url;
 
 
@@ -17,8 +15,14 @@ public class TestData implements ICycleData {
         this.url = url;
     }
 
-    @Override
     public String getImgUrl() {
         return url;
+    }
+
+    @Override
+    public String toString() {
+        return "TestData{" +
+                "url='" + url + '\'' +
+                '}';
     }
 }

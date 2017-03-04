@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BaseCycleView">
+        <!--是否可以自动轮播 默认可以-->
+        <attr name="isAutoPlay" format="boolean"/>
+
+        <!--自动轮播时间 默认3000ms-->
+        <attr name="autoPlayTime" format="integer"/>
+
+        <!--是否显示底部介绍 默认有-->
+        <attr name="isDisplayIntr" format="boolean"/>
+
+        <!--介绍文字大小 默认14sp-->
+        <attr name="introTextSize" format="integer"/>
+
+        <!--介绍文字颜色 默认白色-->
+        <attr name="introTextColor" format="color"/>
+
+        <!--底部介绍背景色 默认黑色，0.5透明度-->
+        <attr name="intrBackgroundColor" format="color"/>
+
+        <!--底部介绍背景色 默认黑色，0.5透明度-->
+        <attr name="intrBackgroundAlpha" format="float"/>
+
+        <!--是否有切换指示器 默认无-->
+        <attr name="isDisplayIndicator" format="boolean"/>
+
+        <!--切换指示器未选中状态图-->
+        <attr name="indicatorDefault" format="reference"/>
+
+        <!--切换指示器选中状态图-->
+        <attr name="indicatorFocus" format="reference"/>
+
+        <!--切换指示器的位置 默认在中间-->
+        <attr name="indicatorGravity" format="enum">
+            <enum name="left_center_vertical" value="1"/>
+            <enum name="right_center_vertical" value="2"/>
+            <enum name="center" value="3"/>
+            <enum name="top_left" value="4"/>
+            <enum name="top_center" value="5"/>
+            <enum name="top_right" value="6"/>
+            <enum name="bottom_left" value="7"/>
+            <enum name="bottom_center" value="8"/>
+            <enum name="bottom_right" value="9"/>
+        </attr>
+
+        <!--底部指示器，文字，底部背景等的padding-->
+        <attr name="anyPadding" format="dimension"/>
+
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="bootom_layout" type="id"/>
+
+
+    <item name="indicator_layout" type="id"/>
+
+    <item name="intr_text" type="id"/>
+
+</resources>

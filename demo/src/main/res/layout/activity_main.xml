@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <me.leslie.demo.IView
+    <me.leslie.demo.TestCycleView
+        app:autoPlayTime="3000"
+        app:introTextColor="@color/colorAccent"
+        app:isDisplayIntr="true"
+        app:intrBackgroundColor="#000000"
+        app:isDisplayIndicator="true"
+        app:indicatorDefault="@drawable/normal"
+        app:indicatorFocus="@drawable/focus"
+        app:anyPadding="10px"
         android:layout_marginBottom="20dp"
+        app:indicatorGravity="right_center_vertical"
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
