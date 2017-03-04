@@ -1,6 +1,7 @@
 # CycleView
-一个可选择自动循环的View，不受数据结构限制，可用setData()传递任何数据结构的list，也可以通过add()添加任何结构的单项数据。还可以设置底部指示器，当前项介绍，多种位置调整等。所有操作最终都需要调用notifyDataSetChanged()使其生效。
-
+    一个可选择自动循环的View，不受数据结构限制，可用setData()传递任何数据结构的list，也可以通过add()添加任何结构的单项数据。还可以设置底部指示器，当前项介绍，多种位置调整等。所有操作最终都需要调用notifyDataSetChanged()使其生效。
+    一种类型定义一个ViewModel，内部实现重用机制。
+    
 # Usage
 ```Java
 public class TestCycleView extends BaseCycleView {
