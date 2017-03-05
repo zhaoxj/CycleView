@@ -1,27 +1,24 @@
 # CycleView
-一个可选择自动循环的View，不受数据结构限制，可用setData()传递任何数据结构的list，也可以通过add()添加任何结构的单项数据。还可以设置底部指示器，当前项介绍，多种位置调整等。所有操作最终都需要调用notifyDataSetChanged()使其生效。
+一个可选择自动循环的View.
 
-一种类型定义一个ViewModel，内部实现重用机制。
+1.不受数据结构限制，可用setData()传递任何数据结构的list，也可以通过add()添加任何结构的单项数据，也可两者混用;
+2.可配置是否自动轮播;
+3.可以设置底部指示器，当前项介绍，介绍项背景，文字等。多种位置样式可配置等;
+4.一种类型定义一个ViewModel，内部实现重用机制;
+5.手指触碰到View时停止自动轮播，有API供锁屏时停止自动轮播，开屏时开启;
+6.所有set最终都需要调用notifyDataSetChanged()使其生效。
     
 # Usage
 ```Java
 public class TestCycleView extends BaseCycleView {
 
-
-    public TestCycleView(Context context, List list) {
-        super(context, list);
-    }
-
     public TestCycleView(Context context) {
         super(context);
     }
 
+    //xml中使用时必须实现该构造器
     public TestCycleView(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public TestCycleView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -97,7 +94,7 @@ public class TestCycleView extends BaseCycleView {
     }
     
     
-    //Use in xml
+        //Use in xml
         final TestCycleView iView = (TestCycleView) findViewById(R.id.view);
         iView.add("https://wap.baidu.com/")
                 .add(new TestData("http://g.hiphotos.baidu.com/image/pic/item/810a19d8bc3eb1350557f4bba41ea8d3fd1f4419.jpg"))
@@ -137,59 +134,6 @@ public class TestCycleView extends BaseCycleView {
                 .notifyDataSetChanged();
     
     
-    
-    
-    
-    
-    
-    <declare-styleable name="BaseCycleView">
-        <!--是否可以自动轮播 默认可以-->
-        <attr name="isAutoPlay" format="boolean"/>
-
-        <!--自动轮播时间 默认3000ms-->
-        <attr name="autoPlayTime" format="integer"/>
-
-        <!--是否显示底部介绍 默认有-->
-        <attr name="isDisplayIntr" format="boolean"/>
-
-        <!--介绍文字大小 默认14sp-->
-        <attr name="introTextSize" format="integer"/>
-
-        <!--介绍文字颜色 默认白色-->
-        <attr name="introTextColor" format="color"/>
-
-        <!--底部介绍背景色 默认黑色，0.5透明度-->
-        <attr name="intrBackgroundColor" format="color"/>
-
-        <!--底部介绍背景色 默认黑色，0.5透明度-->
-        <attr name="intrBackgroundAlpha" format="float"/>
-
-        <!--是否有切换指示器 默认无-->
-        <attr name="isDisplayIndicator" format="boolean"/>
-
-        <!--切换指示器未选中状态图-->
-        <attr name="indicatorDefault" format="reference"/>
-
-        <!--切换指示器选中状态图-->
-        <attr name="indicatorFocus" format="reference"/>
-
-        <!--切换指示器的位置 默认在中间-->
-        <attr name="indicatorGravity" format="enum">
-            <enum name="left_center_vertical" value="1"/>
-            <enum name="right_center_vertical" value="2"/>
-            <enum name="center" value="3"/>
-            <enum name="top_left" value="4"/>
-            <enum name="top_center" value="5"/>
-            <enum name="top_right" value="6"/>
-            <enum name="bottom_left" value="7"/>
-            <enum name="bottom_center" value="8"/>
-            <enum name="bottom_right" value="9"/>
-        </attr>
-
-        <!--底部指示器，文字，底部背景等的padding-->
-        <attr name="anyPadding" format="dimension"/>
-
-    </declare-styleable>
     
 ```
 
