@@ -376,7 +376,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public void stopPlay() {
-        if ((list != null ? list.size() : 0) > 1) {
+        if ((list != null ? list.size() : 0) > 1 && isAutoPlaying) {
             isAutoPlaying = false;
             handler.removeCallbacks(autoPlayRunnable);
         }
