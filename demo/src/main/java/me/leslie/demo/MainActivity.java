@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //注意，数据顺序修改时记得修改下TestCycleView的getViewModel()，demo用了0和4两个位置使用Web的ViewModel
+
         //Use in xml
         final TestCycleView iView = (TestCycleView) findViewById(R.id.view);
         iView.add("https://wap.baidu.com/")

@@ -1,17 +1,13 @@
 package me.leslie.demo;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.util.List;
 
 import me.leslie.cycleview.BaseCycleView;
 import me.leslie.cycleview.BaseViewModel;
@@ -26,9 +22,6 @@ import me.leslie.cycleview.BaseViewModel;
 public class TestCycleView extends BaseCycleView {
 
 
-    public TestCycleView(Context context, List list) {
-        super(context, list);
-    }
 
     public TestCycleView(Context context) {
         super(context);
@@ -38,18 +31,10 @@ public class TestCycleView extends BaseCycleView {
         super(context, attrs);
     }
 
-    public TestCycleView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public TestCycleView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
 
     @Override
     public BaseViewModel getViewModel(int position) {
-        if (0 == position || 4 == position){
+        if (1 == position || 4 == position){
             return new Model1();
         }else {
             return new Model2();

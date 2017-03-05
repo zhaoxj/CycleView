@@ -156,7 +156,6 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
             //简介
             initIntr();
 
-
             //两大种情况需要重新布局
             reLayout();
 
