@@ -498,6 +498,12 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     }
 
     @Override
+    public BaseCycleView setCycle(boolean cycle) {
+        isCycle = cycle;
+        return this;
+    }
+
+    @Override
     public BaseCycleView setAutoPlay(boolean isAutoPlay) {
         this.isAutoPlay = isAutoPlay;
         return this;

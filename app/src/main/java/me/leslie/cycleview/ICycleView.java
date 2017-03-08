@@ -22,6 +22,13 @@ interface ICycleView {
     int GRAVITY_BOTTOM_CENTER = 8;
     int GRAVITY_BOTTOM_RIGHT = 9;
 
+    /**
+     * 是否可以循环
+     * @param isCycle
+     * @return
+     */
+    BaseCycleView setCycle(boolean isCycle);
+
 
     /**
      * 设置是否可以自动轮播
