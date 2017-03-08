@@ -2,6 +2,9 @@
 <resources>
 
     <declare-styleable name="BaseCycleView">
+        <!--是否可以无限循环滑动/播放 默认可以-->
+        <attr name="isCycle" format="boolean"/>
+
         <!--是否可以自动轮播 默认可以-->
         <attr name="isAutoPlay" format="boolean"/>
 

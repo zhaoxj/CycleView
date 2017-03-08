@@ -34,7 +34,7 @@ public class TestCycleView extends BaseCycleView {
 
     @Override
     public BaseViewModel getViewModel(int position) {
-        if (1 == position || 4 == position){
+        if (0 == position || 4 == position){
             return new Model1();
         }else {
             return new Model2();

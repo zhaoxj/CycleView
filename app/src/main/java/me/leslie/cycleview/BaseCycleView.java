@@ -36,6 +36,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     /**
      * 配置属性
      **/
+    private boolean isCycle;
     private boolean isAutoPlay;
     private boolean isDisplayIntr;
     private boolean isDisplayIndicator;
@@ -58,7 +59,6 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     private boolean isAutoPlaying;
     private TextView intrText;
     private int realSize;
-    private int size;
     private boolean isAdd;
     protected List list;
     private Handler handler;
@@ -119,6 +119,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     private void init(Context context, AttributeSet attrs) {
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BaseCycleView);
         if (null != a) {
+            isCycle = a.getBoolean(R.styleable.BaseCycleView_isCycle, true);
             isAutoPlay = a.getBoolean(R.styleable.BaseCycleView_isAutoPlay, true);
             isDisplayIntr = a.getBoolean(R.styleable.BaseCycleView_isDisplayIntr, true);
             isDisplayIndicator = a.getBoolean(R.styleable.BaseCycleView_isDisplayIndicator, false);
@@ -353,7 +354,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public final void onFlingWhite() {
-        if (null != list && 2 == list.size()) {
+        if (isCycle && null != list && 2 == list.size()) {
             list.add(2, list.get(0));
             list.add(3, list.get(1));
             isAdd = true;
@@ -389,7 +390,11 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public int getMaxCount() {
-        return null != list && !list.isEmpty() ? Integer.MAX_VALUE / 2 : 0;
+        if (isCycle) {
+            return null != list && !list.isEmpty() ? Integer.MAX_VALUE / 2 : 0;
+        }else {
+            return null != list && !list.isEmpty() ? list.size() : 0;
+        }
     }
 
     @Override
@@ -403,10 +408,10 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
             if (isDisplayIndicator && null != indecatorViews) {
                 for (int i = 0; i < realSize; i++) {
                     if (i != (index % realSize)) {
-                        indecatorViews.get(i).setImageResource(indicatorFocus);
+                        indecatorViews.get(i).setImageResource(indicatorDefault);
                     }
                 }
-                indecatorViews.get(index % realSize).setImageResource(indicatorDefault);
+                indecatorViews.get(index % realSize).setImageResource(indicatorFocus);
             }
 
             if (null != adapter){
@@ -475,25 +480,12 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
             list = new ArrayList<>();
         }
         realSize = list.size();
-        onFlingWhite();
-        size = list.size();
-        int num = 10000;
-        if (size <= 0) {
-            num = 0;
-        } else if (size >= 5) {
-            num = 2000;
-        } else if (size == 4) {
-            num = 2500;
-        } else if (size == 3) {
-            num = 7000;
-        } else if (size == 2) {
-            num = 5000;
-        }
         setIndicatorIntro();
         adapter = null;
         isNotifyDataSetChanged = true;
         viewPager.setAdapter(adapter = new CycleViewAdapter());
-        viewPager.setCurrentItem(size = size * num);
+        int cycleStart = realSize != 0 ? (int) (Math.floor(Integer.MAX_VALUE / 4 / realSize) * realSize) : 0;
+        viewPager.setCurrentItem(isCycle ? cycleStart : 0);
         if (isAutoPlay) {
             startPlay();
         }

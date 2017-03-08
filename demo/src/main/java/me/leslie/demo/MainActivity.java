@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Use in xml
         final TestCycleView iView = (TestCycleView) findViewById(R.id.view);
-        iView.add("https://wap.baidu.com/")
+        iView
+                .add("https://wap.baidu.com/")
                 .add(new TestData("http://g.hiphotos.baidu.com/image/pic/item/810a19d8bc3eb1350557f4bba41ea8d3fd1f4419.jpg"))
                 .add(new TestData("http://e.hiphotos.baidu.com/image/pic/item/bd315c6034a85edfb1f0942f4b540923dd5475b9.jpg"))
                 .add(new TestData("http://f.hiphotos.baidu.com/image/pic/item/9358d109b3de9c8294f9ac836e81800a19d84319.jpg"))
