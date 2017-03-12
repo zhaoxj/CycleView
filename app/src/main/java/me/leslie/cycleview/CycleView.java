@@ -21,9 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * 介绍：CycleView的基类
@@ -32,7 +29,7 @@ import java.util.List;
  * 时间: 2017-03-02  14:09
  */
 
-public abstract class BaseCycleView extends RelativeLayout implements ICycleView, ViewPager.OnPageChangeListener {
+public class CycleView extends RelativeLayout implements ICycleView, ViewPager.OnPageChangeListener {
     /**
      * 配置属性
      **/
@@ -58,62 +55,39 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     private View intrBackLayout;
     private boolean isAutoPlaying;
     private TextView intrText;
-    private int realSize;
     private boolean isAdd;
-    protected List list;
     private Handler handler;
-    private SparseArray<ImageView> indecatorViews;
+    private SparseArray<ImageView> indicatorViews = new SparseArray<>();
     private boolean isNotifyDataSetChanged;
 
-    /**
-     * 获取具体项的ViewModel
-     * @param position
-     * @return
-     */
-    public abstract BaseViewModel getViewModel(final int position);
+    private SparseArray<Vm> vmSparseArray = new SparseArray<>();
+    private BaseCycleViewModel[] vms;
+    private int count;
 
-    public BaseCycleView(Context context, List list) {
-        super(context);
-        this.list = list;
-        init(context, null);
+    public CycleView setViewModel(BaseCycleViewModel... vms){
+        this.vms = vms;
+        return this;
     }
 
-
-    public BaseCycleView(Context context) {
+    public CycleView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public BaseCycleView(Context context, AttributeSet attrs) {
+    public CycleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public BaseCycleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CycleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public BaseCycleView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CycleView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
-    }
-
-    @Override
-    public BaseCycleView setData(List<?> list) {
-        this.list = list;
-        return this;
-    }
-
-
-    @Override
-    public BaseCycleView add(Object o) {
-        if (null == list){
-            list = new ArrayList();
-        }
-        list.add(o);
-        return this;
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -134,19 +108,13 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
             anyPadding = a.getDimensionPixelSize(R.styleable.BaseCycleView_anyPadding, anyPadding);
             a.recycle();
         }
-
-        viewPager = new CycleViewPager(context);
-        viewPager.addOnPageChangeListener(this);
-        addView(viewPager, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         handler = new Handler();
-        notifyDataSetChanged();
     }
 
     @Override
-    public final BaseCycleView setIndicatorIntro() {
-        if (null != bottomLayout) removeView(bottomLayout);
-        if (null != indecatorViews) indecatorViews.clear();
-        if ((isDisplayIndicator || isDisplayIntr) && null == bottomLayout) {
+    public final CycleView setIndicatorIntro() {
+        if (null != indicatorViews) indicatorViews.clear();
+        if ((isDisplayIndicator || isDisplayIntr)) {
 
             //外层
             initBottomLayout();
@@ -165,8 +133,8 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     }
 
     @Override
-    public BaseCycleView initBottomLayout() {
-        if (realSize > 0) {
+    public CycleView initBottomLayout() {
+        if (count > 0 && null == bottomLayout) {
             intrBackLayout = new LinearLayout(getContext());
             intrBackLayout.setBackgroundColor(intrBackgroundColor);
             intrBackLayout.setAlpha(intrBackAlpha);
@@ -185,35 +153,40 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     }
 
     @Override
-    public final BaseCycleView initIndicator(boolean isRelayout) {
+    public final CycleView initIndicator(boolean isRelayout) {
         if (isDisplayIndicator && null != bottomLayout) {
 
-            if (realSize == 0) return this;
-            int size = realSize;
-            if (isAdd && 4 == realSize) {
-                realSize = size = 2;
+            if (count == 0) return this;
+            int size = count;
+            if (isAdd && 4 == count) {
+                size = 2;
             }
 
             if (-1 == indicatorDefault || -1 == indicatorFocus) {
                 throw new RuntimeException("Pls add \"dotDefault\" and \"dotFocus\" !");
             }
-            indecatorViews = new SparseArray<>();
-            indicatorLayout = new LinearLayout(getContext());
-            indicatorLayout.setId(R.id.indicator_layout);
-            indicatorLayout.setGravity(Gravity.CENTER_VERTICAL);
-            bottomLayout.addView(indicatorLayout, getIndicatorLayoutParams(isRelayout));
-            for (int count = 0; count < size; count++) {
+            if (null == indicatorLayout){
+                indicatorLayout = new LinearLayout(getContext());
+                bottomLayout.addView(indicatorLayout, getIndicatorLayoutParams(isRelayout));
+                indicatorLayout.setId(R.id.indicator_layout);
+                indicatorLayout.setGravity(Gravity.CENTER_VERTICAL);
+            }else {
+                indicatorLayout.removeAllViews();
+                indicatorViews.clear();
+            }
+            for (int i = 0; i < size; i++) {
                 // 翻页指示的点
                 ImageView pointView = new ImageView(getContext());
                 pointView.setPadding(6, 0, 6, 0);
-                if (0 == indecatorViews.size()){
+                if (0 == indicatorViews.size()){
                     pointView.setImageResource(indicatorFocus);
                 }else {
                     pointView.setImageResource(indicatorDefault);
                 }
-                indecatorViews.put(count, pointView);
+                indicatorViews.put(i, pointView);
                 indicatorLayout.addView(pointView);
             }
+
         }
         return this;
     }
@@ -325,6 +298,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
                      * 重新布局
                      */
                     bottomLayout.removeView(indicatorLayout);
+                    indicatorLayout = null;
                     initIndicator(true);
                     break;
             }
@@ -332,8 +306,8 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     }
 
     @Override
-    public final BaseCycleView initIntr() {
-        if (isDisplayIntr && null != bottomLayout) {
+    public final CycleView initIntr() {
+        if (isDisplayIntr && null != bottomLayout && null == intrText) {
             intrText = new TextView(getContext());
             intrText.setId(R.id.intr_text);
             intrText.setTextSize(TypedValue.COMPLEX_UNIT_SP, introTextSize);
@@ -341,22 +315,27 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
             intrText.setSingleLine();
             intrText.setEllipsize(TextUtils.TruncateAt.END);
             bottomLayout.addView(intrText, getIntrTextLayoutParams());
-        }
 
-
-        LayoutParams backLp;
-        if (null != intrBackLayout && null != bottomLayout && null != (backLp = (LayoutParams) intrBackLayout.getLayoutParams())){
-            backLp.addRule(RelativeLayout.ALIGN_TOP, R.id.bootom_layout);
-            backLp.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.bootom_layout);
+            LayoutParams backLp;
+            if (null != intrBackLayout && null != bottomLayout && null != (backLp = (LayoutParams) intrBackLayout.getLayoutParams())){
+                backLp.addRule(RelativeLayout.ALIGN_TOP, R.id.bootom_layout);
+                backLp.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.bootom_layout);
+            }
         }
         return this;
     }
 
     @Override
     public final void onFlingWhite() {
-        if (isCycle && null != list && 2 == list.size()) {
-            list.add(2, list.get(0));
-            list.add(3, list.get(1));
+        if (isCycle && null != vmSparseArray) {
+            if (1 == vmSparseArray.size()){
+                vmSparseArray.get(0).getViewModel().onDeoublData();
+            }else if (2 == vmSparseArray.size()){
+                Vm vm1 = vmSparseArray.get(0);
+                Vm vm2 = vmSparseArray.get(1);
+                vmSparseArray.put(2, vm1.setStartPosition(count));
+                vmSparseArray.put(3, vm2.setStartPosition(count + vm1.getViewModel().getItemCount()));
+            }
             isAdd = true;
         }
     }
@@ -368,7 +347,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public void startPlay() {
-        if ((list != null ? list.size() : 0) > 1 && !isAutoPlaying) {
+        if (count > 1 && !isAutoPlaying) {
             isAutoPlaying = true;
             handler.postDelayed(autoPlayRunnable, autoPlayTime);
         }
@@ -376,7 +355,7 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public void stopPlay() {
-        if ((list != null ? list.size() : 0) > 1 && isAutoPlaying) {
+        if (count > 1 && isAutoPlaying) {
             isAutoPlaying = false;
             handler.removeCallbacks(autoPlayRunnable);
         }
@@ -391,9 +370,10 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     @Override
     public int getMaxCount() {
         if (isCycle) {
-            return null != list && !list.isEmpty() ? Integer.MAX_VALUE / 2 : 0;
+            //循环情况下如果单张不让可滑动，这里改为：count > 1 ? Integer.MAX_VALUE / 2 : 1;
+            return count > 0 ? Integer.MAX_VALUE / 2 : 0;
         }else {
-            return null != list && !list.isEmpty() ? list.size() : 0;
+            return count;
         }
     }
 
@@ -403,15 +383,15 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public void onPageSelected(int index) {
-        if (0 != realSize) {
-            onPageChange(index % realSize);
-            if (isDisplayIndicator && null != indecatorViews) {
-                for (int i = 0; i < realSize; i++) {
-                    if (i != (index % realSize)) {
-                        indecatorViews.get(i).setImageResource(indicatorDefault);
+        if (0 != count) {
+            onPageChange(index % count);
+            if (isDisplayIndicator && null != indicatorViews) {
+                for (int i = 0; i < count; i++) {
+                    if (i != (index % count)) {
+                        indicatorViews.get(i).setImageResource(indicatorDefault);
                     }
                 }
-                indecatorViews.get(index % realSize).setImageResource(indicatorFocus);
+                indicatorViews.get(index % count).setImageResource(indicatorFocus);
             }
 
             if (null != adapter){
@@ -423,12 +403,6 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     @Override
     public void onPageScrollStateChanged(int i) {
 
-    }
-
-
-    @Override
-    public final Object getItem(final int position) {
-        return null != list && position > -1 && list.size() > position ? list.get(position) : null;
     }
 
     private Runnable autoPlayRunnable = new Runnable() {
@@ -476,15 +450,27 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
 
     @Override
     public void notifyDataSetChanged() {
-        if (null == list) {
-            list = new ArrayList<>();
+        resize();
+
+        //如果是无限循环的，刷新是必须全部重新布局，因为数量太大，直接更新会出现卡顿
+        if ((isCycle && null != viewPager) || null == viewPager){
+            removeAllViews();
+            viewPager = null;
+            bottomLayout = null;
+            intrText = null;
+            indicatorLayout = null;
+            viewPager = new CycleViewPager(getContext());
+            viewPager.addOnPageChangeListener(this);
+            viewPager.setAdapter(adapter = new CycleViewAdapter());
+            addView(viewPager, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
-        realSize = list.size();
+
         setIndicatorIntro();
-        adapter = null;
+        if (!isCycle) {
+            adapter.notifyDataSetChanged();
+        }
         isNotifyDataSetChanged = true;
-        viewPager.setAdapter(adapter = new CycleViewAdapter());
-        int cycleStart = realSize != 0 ? (int) (Math.floor(Integer.MAX_VALUE / 4 / realSize) * realSize) : 0;
+        int cycleStart = count != 0 ? (int) (Math.floor(Integer.MAX_VALUE / 4 / count) * count) : 0;
         viewPager.setCurrentItem(isCycle ? cycleStart : 0);
         if (isAutoPlay) {
             startPlay();
@@ -498,121 +484,161 @@ public abstract class BaseCycleView extends RelativeLayout implements ICycleView
     }
 
     @Override
-    public BaseCycleView setCycle(boolean cycle) {
+    public CycleView setCycle(boolean cycle) {
         isCycle = cycle;
         return this;
     }
 
     @Override
-    public BaseCycleView setAutoPlay(boolean isAutoPlay) {
+    public CycleView setAutoPlay(boolean isAutoPlay) {
         this.isAutoPlay = isAutoPlay;
         return this;
     }
 
     @Override
-    public BaseCycleView setAutoPlayTime(int time) {
+    public CycleView setAutoPlayTime(int time) {
         this.autoPlayTime = time;
         return this;
     }
 
     @Override
-    public BaseCycleView setDisplayIntr(boolean displayIntr) {
+    public CycleView setDisplayIntr(boolean displayIntr) {
         this.isDisplayIntr = displayIntr;
         return this;
     }
 
     @Override
-    public BaseCycleView setIntroBackgroundColor(int color) {
-        this.introTextColor = color;
+    public CycleView setIntroBackgroundColor(int color) {
+        this.intrBackgroundColor = color;
+        if (null != intrBackLayout){
+            intrBackLayout.setBackgroundColor(introTextColor);
+        }
         return this;
     }
 
     @Override
-    public BaseCycleView setDisplayIndicator(boolean display) {
+    public CycleView setDisplayIndicator(boolean display) {
         this.isDisplayIndicator = display;
         return this;
     }
 
     @Override
-    public BaseCycleView setIndicatorDefaultResId(int resId) {
+    public CycleView setIndicatorDefaultResId(int resId) {
         this.indicatorDefault = resId;
         return this;
     }
 
     @Override
-    public BaseCycleView setIndicatorFocusResId(int resId) {
+    public CycleView setIndicatorFocusResId(int resId) {
         this.indicatorFocus = resId;
         return this;
     }
 
     @Override
-    public BaseCycleView setIndicatorGravity(int gravity) {
+    public CycleView setIndicatorGravity(int gravity) {
         this.indicatorGravity = gravity;
+        setIndicatorIntro();
         return this;
     }
 
     @Override
-    public BaseCycleView setIntroTextSize(int spSize) {
+    public CycleView setIntroTextSize(int spSize) {
         this.introTextSize = spSize;
+        if (null != intrText){
+            intrText.setTextSize(TypedValue.COMPLEX_UNIT_SP, spSize);
+        }
         return this;
     }
 
     @Override
-    public BaseCycleView setIntroTextColor(int color) {
+    public CycleView setIntroTextColor(int color) {
         this.introTextColor = color;
+        if (null != intrText){
+            intrText.setTextColor(introTextColor);
+        }
         return this;
+    }
+
+    public Vm getVm(final int position){
+        int size = vmSparseArray.size();
+        int total = 0;
+        int lastTotal = total;
+        Vm vm;
+        for (int i = 0; i < size; i++) {
+            total += (vm = vmSparseArray.get(i)).getViewModel().getItemCount();
+            if (position >= lastTotal && position < total) {
+                return vm;
+            }
+            lastTotal = total;
+        }
+        return null;
+    }
+
+    private void resize(){
+        vmSparseArray.clear();
+        count = 0;
+        int length;
+        if (null != vms && (length = vms.length) > 0) {
+            BaseCycleViewModel viewModel;
+            for (int i = 0; i < length; i++) {
+                if (null != (viewModel = vms[i])) {
+                    vmSparseArray.put(i, new Vm(viewModel.setContext(getContext()).setAdapter(this), count));
+                    count += viewModel.getItemCount();
+                }
+            }
+        }
     }
 
     /**
      * Adapter
      */
     final class CycleViewAdapter extends PagerAdapter {
-        private SparseArray<BaseViewModel> viewModels;
-
-        public CycleViewAdapter() {
-            viewModels = new SparseArray<>();
-        }
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             View view = null;
-            if (0 != realSize){
-                final int realPosition = position % realSize;
-                BaseViewModel viewModel = viewModels.get(realPosition);
-                if (null == viewModel) {
-                    viewModel = getViewModel(realPosition);
-                    viewModels.put(realPosition, viewModel);
+            if (0 != count){
+                final int realPosition = position % count;
+                Vm vm = getVm(realPosition);
+                if (null != vm){
+                    BaseCycleViewModel viewModel = vm.getViewModel();
+                    final int positionInViewModel = realPosition - vm.getStartPosition();
+                    if (null != viewModel && null != (view = viewModel.onCreatView(positionInViewModel, viewModel.getItem(positionInViewModel)))) {
+                        container.addView(view);
+                        final BaseCycleViewModel finalViewModel = viewModel;
+                        view.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finalViewModel.onClick(positionInViewModel , finalViewModel.getItem(positionInViewModel));
+                            }
+                        });
+                        view.setOnLongClickListener(new OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                return finalViewModel.onLongClick(positionInViewModel, finalViewModel.getItem(positionInViewModel));
+                            }
+                        });
+                    }
+                    if (isNotifyDataSetChanged && 0 == realPosition){
+                        isNotifyDataSetChanged = false;
+                        onPageSelected(0);
+                    }
                 }
-                if (null != viewModel && null != (view = viewModel.onCreatView(realPosition, getItem(realPosition)))) {
-                    container.addView(view);
-                    final BaseViewModel finalViewModel = viewModel;
-                    view.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finalViewModel.onClick(realPosition , getItem(realPosition));
-                        }
-                    });
-                    view.setOnLongClickListener(new OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            return finalViewModel.onLongClick(realPosition, getItem(realPosition));
-                        }
-                    });
-                }
-                if (isNotifyDataSetChanged && 0 == realPosition){
-                    isNotifyDataSetChanged = false;
-                    onPageSelected(0);
-                }
+
             }
             return view;
         }
 
-        public void onPageSelected(int position){
-            if (0 != realSize) {
-                final int realPosition = position % realSize;
-                BaseViewModel viewModel = null;
-                if (null != (viewModel = viewModels.get(realPosition))){
-                    viewModel.onPageSelected(realPosition, getItem(realPosition));
+        final void onPageSelected(int position){
+            if (0 != count) {
+                int realPosition = position % count;
+                Vm vm = getVm(realPosition);
+                if (null != vm){
+                    BaseCycleViewModel viewModel = vm.getViewModel();
+                    int positionInViewModel = realPosition - vm.getStartPosition();
+                    if (null != viewModel){
+                        viewModel.onPageSelected(positionInViewModel, viewModel.getItem(positionInViewModel));
+                    }
                 }
             }
         }

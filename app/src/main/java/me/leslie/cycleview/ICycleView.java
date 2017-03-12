@@ -2,8 +2,6 @@ package me.leslie.cycleview;
 
 import android.support.v4.view.ViewPager;
 
-import java.util.List;
-
 /**
  * 介绍：
  * 作者：xjzhao
@@ -27,7 +25,7 @@ interface ICycleView {
      * @param isCycle
      * @return
      */
-    BaseCycleView setCycle(boolean isCycle);
+    CycleView setCycle(boolean isCycle);
 
 
     /**
@@ -35,46 +33,46 @@ interface ICycleView {
      * @param isAutoPlay
      * @return
      */
-    BaseCycleView setAutoPlay(boolean isAutoPlay);
+    CycleView setAutoPlay(boolean isAutoPlay);
 
     /**
      * 设置自动轮播时间
      * @param time
      */
-    BaseCycleView setAutoPlayTime(int time);
+    CycleView setAutoPlayTime(int time);
 
     /**
      * 设置是否显示底部介绍
      * @param displayIntr
      */
-    BaseCycleView setDisplayIntr(boolean displayIntr);
+    CycleView setDisplayIntr(boolean displayIntr);
 
     /**
      * 设置底部文字介绍的背景色
      * @param color
      * @return
      */
-    BaseCycleView setIntroBackgroundColor(int color);
+    CycleView setIntroBackgroundColor(int color);
 
     /**
      * 设置是否显示切换指示器
      * @return
      */
-    BaseCycleView setDisplayIndicator(boolean display);
+    CycleView setDisplayIndicator(boolean display);
 
     /**
      * 设置指示器默认图
      * @param resId
      * @return
      */
-    BaseCycleView setIndicatorDefaultResId(int resId);
+    CycleView setIndicatorDefaultResId(int resId);
 
     /**
      * 设置指示器选中图
      * @param resId
      * @return
      */
-    BaseCycleView setIndicatorFocusResId(int resId);
+    CycleView setIndicatorFocusResId(int resId);
 
     /**
      * 设置指示器位置
@@ -89,59 +87,59 @@ interface ICycleView {
      *                {@link #GRAVITY_BOTTOM_RIGHT}
      * @return
      */
-    BaseCycleView setIndicatorGravity(int gravity);
+    CycleView setIndicatorGravity(int gravity);
 
     /**
      * 设置介绍文字大小
      * @param spSize
      * @return
      */
-    BaseCycleView setIntroTextSize(int spSize);
+    CycleView setIntroTextSize(int spSize);
 
     /**
      * 设置介绍文字颜色
      * @param color
      * @return
      */
-    BaseCycleView setIntroTextColor(int color);
+    CycleView setIntroTextColor(int color);
 
-    /**
-     * 设置数据
-     * @param list
-     */
-    BaseCycleView setData(List<?> list);
-
-    /**
-     * 添加数据,添加完成必须调用notifyDataSetChanged()
-     * @param o
-     * @return
-     */
-    BaseCycleView add(Object o);
+//    /**
+//     * 设置数据
+//     * @param list
+//     */
+//    CycleView setData(List<?> list);
+//
+//    /**
+//     * 添加数据,添加完成必须调用notifyDataSetChanged()
+//     * @param o
+//     * @return
+//     */
+//    CycleView add(Object o);
 
 
     /**
      * 设置轮播指示器和简介
      * @return
      */
-    BaseCycleView setIndicatorIntro();
+    CycleView setIndicatorIntro();
 
     /**
      * 初始化底部View
      * @return
      */
-    BaseCycleView initBottomLayout();
+    CycleView initBottomLayout();
 
     /**
      * 初始化指示器
      * @return
      */
-    BaseCycleView initIndicator(boolean isRelayout);
+    CycleView initIndicator(boolean isRelayout);
 
     /**
      * 初始化简介
      * @return
      */
-    BaseCycleView initIntr();
+    CycleView initIntr();
 
     /**
      * 设置当前项简介
@@ -160,13 +158,6 @@ interface ICycleView {
      * @return
      */
     int getMaxCount();
-
-    /**
-     * 获取item数据
-     * @param position
-     * @return
-     */
-    Object getItem(int position);
 
 
     /**

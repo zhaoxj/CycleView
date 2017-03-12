@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <me.leslie.demo.TestCycleView
-        app:isCycle="false"
+    <me.leslie.cycleview.CycleView
+        app:isCycle="true"
         app:autoPlayTime="3000"
         app:introTextColor="@color/colorAccent"
         app:isDisplayIntr="true"
