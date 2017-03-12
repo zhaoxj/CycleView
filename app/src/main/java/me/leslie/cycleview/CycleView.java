@@ -91,21 +91,21 @@ public class CycleView extends RelativeLayout implements ICycleView, ViewPager.O
     }
 
     private void init(Context context, AttributeSet attrs) {
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BaseCycleView);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CycleView);
         if (null != a) {
-            isCycle = a.getBoolean(R.styleable.BaseCycleView_isCycle, true);
-            isAutoPlay = a.getBoolean(R.styleable.BaseCycleView_isAutoPlay, true);
-            isDisplayIntr = a.getBoolean(R.styleable.BaseCycleView_isDisplayIntr, true);
-            isDisplayIndicator = a.getBoolean(R.styleable.BaseCycleView_isDisplayIndicator, false);
-            indicatorDefault = a.getResourceId(R.styleable.BaseCycleView_indicatorDefault, -1);
-            indicatorFocus = a.getResourceId(R.styleable.BaseCycleView_indicatorFocus, -1);
-            intrBackgroundColor = a.getColor(R.styleable.BaseCycleView_intrBackgroundColor, intrBackgroundColor);
-            intrBackAlpha = a.getFloat(R.styleable.BaseCycleView_intrBackgroundAlpha, intrBackAlpha);
-            introTextColor = a.getColor(R.styleable.BaseCycleView_introTextColor, introTextColor);
-            introTextSize = a.getDimensionPixelSize(R.styleable.BaseCycleView_introTextSize, introTextSize);
-            indicatorGravity = a.getInt(R.styleable.BaseCycleView_indicatorGravity, RelativeLayout.CENTER_HORIZONTAL);
-            autoPlayTime = a.getInt(R.styleable.BaseCycleView_autoPlayTime, autoPlayTime);
-            anyPadding = a.getDimensionPixelSize(R.styleable.BaseCycleView_anyPadding, anyPadding);
+            isCycle = a.getBoolean(R.styleable.CycleView_isCycle, true);
+            isAutoPlay = a.getBoolean(R.styleable.CycleView_isAutoPlay, true);
+            isDisplayIntr = a.getBoolean(R.styleable.CycleView_isDisplayIntr, true);
+            isDisplayIndicator = a.getBoolean(R.styleable.CycleView_isDisplayIndicator, false);
+            indicatorDefault = a.getResourceId(R.styleable.CycleView_indicatorDefault, -1);
+            indicatorFocus = a.getResourceId(R.styleable.CycleView_indicatorFocus, -1);
+            intrBackgroundColor = a.getColor(R.styleable.CycleView_intrBackgroundColor, intrBackgroundColor);
+            intrBackAlpha = a.getFloat(R.styleable.CycleView_intrBackgroundAlpha, intrBackAlpha);
+            introTextColor = a.getColor(R.styleable.CycleView_introTextColor, introTextColor);
+            introTextSize = a.getDimensionPixelSize(R.styleable.CycleView_introTextSize, introTextSize);
+            indicatorGravity = a.getInt(R.styleable.CycleView_indicatorGravity, RelativeLayout.CENTER_HORIZONTAL);
+            autoPlayTime = a.getInt(R.styleable.CycleView_autoPlayTime, autoPlayTime);
+            anyPadding = a.getDimensionPixelSize(R.styleable.CycleView_anyPadding, anyPadding);
             a.recycle();
         }
         handler = new Handler();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="BaseCycleView">
+    <declare-styleable name="CycleView">
         <!--是否可以无限循环滑动/播放 默认可以-->
         <attr name="isCycle" format="boolean"/>
 
